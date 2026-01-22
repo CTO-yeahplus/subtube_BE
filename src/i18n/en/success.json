@@ -1,0 +1,14 @@
+{
+  "UPDATE_PASS_SUCCESS": "Update password successfully",
+  "ADD_CARD_SUCCESS": "Add card successfully",
+  "DELETE_CARD_SUCCESS": "Delete card successfully",
+  "FINISHED_TRANSLATING": "Finished translating",
+  "PAYMENT_SUCCESS": "Payment successfully",
+  "SUCCESS": "Successfully",
+  "SET_CARD_DEFAULT": "This card has been marked as default",
+  "COMPLETED_PAYMENT": "The funds for this captured payment were credited to the payee's PayPal account.",
+  "DECLINED_PAYMENT": "The funds could not be captured.",
+  "PARTIALLY_REFUNDED_PAYMENT": "An amount less than this captured payment's amount was partially refunded to the payer.",
+  "PENDING_PAYMENT": "The funds for this captured payment was not yet credited to the payee's PayPal account.",
+  "REFUNDED_PAYMENT": "An amount greater than or equal to this captured payment's amount was refunded to the payer."
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tt xml:lang="en-US" xmlns="http://www.w3.org/ns/ttml" xmlns:ttm="http://www.w3.org/ns/ttml#metadata" xmlns:tts="http://www.w3.org/ns/ttml#styling" xmlns:ttp="http://www.w3.org/ns/ttml#parameter" ttp:profile="http://www.w3.org/TR/profile/sdp-us" >
+<head>
+<styling>
+<style xml:id="s1" tts:textAlign="center" tts:extent="90% 90%" tts:origin="5% 5%" tts:displayAlign="after"/>
+<style xml:id="s2" tts:fontSize=".72c" tts:backgroundColor="black" tts:color="white"/>
+</styling>
+<layout>
+<region xml:id="r1" style="s1"/>
+</layout>
+</head>
+<body region="r1">
+<div>
+<p begin="00:00:07.667" end="00:00:20.375" style="s2">1. Beleza atemporal em um mundo moderno: abrace a essência da juventude e da tradição, capturadas perfeitamente nesta imagem deslumbrante de uma estudante japonesa do ensino médio.</p>
+<p begin="00:02:01.650" end="00:02:14.149" style="s2">2.Chova ou faça sol, ela anda com confiança: esta imagem encapsula o espírito de resiliência. Mesmo sob a chuva sutil, ela anda com confiança, seu uniforme brilhante contra as ruas molhadas.</p>
+<p begin="00:03:40.363" end="00:03:53.234" style="s2">3. Um momento congelado no tempo: a expressão serena em seu rosto, o balanço suave de sua saia e o brilho sutil da luz do sol depois da chuva juntos</p>
+</div>
+</body>
+</tt>

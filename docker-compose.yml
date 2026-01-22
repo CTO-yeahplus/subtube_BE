@@ -1,0 +1,53 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  # 1. NestJS 백엔드 서비스
+  api:
+    container_name: nestjs-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3000:3000" # 호스트 포트:컨테이너 포트
+    environment:
+      # NestJS가 DB 컨테이너를 찾을 수 있게 설정
+      - DB_HOST=mysql_db 
+      - DB_PORT=3306
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - PORT=3000
+      # 기타 필요한 환경변수들 (.env 파일에서 불러옴)
+      - JWT_KEY=${JWT_KEY}
+      - APP_MODE=production
+    depends_on:
+      - mysql_db # DB가 먼저 켜져야 앱이 실행됨
+    networks:
+      - app_network
+
+  # 2. MySQL 데이터베이스 서비스
+  mysql_db:
+    container_name: mysql_db
+    image: mysql:8.0 # 또는 사용 중인 버전에 맞춰 mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306" # 외부 접속 필요 없으면 제거 가능 (보안상 권장)
+    volumes:
+      - db_data:/var/lib/mysql # **중요** DB 데이터를 컨테이너가 죽어도 유지
+    networks:
+      - app_network
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+volumes:
+  db_data: # 영구 데이터 저장소
+
+networks:
+  app_network:
+    driver: bridge

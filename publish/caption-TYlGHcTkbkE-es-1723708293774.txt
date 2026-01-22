@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tt xml:lang="en" xmlns="http://www.w3.org/ns/ttml" xmlns:ttm="http://www.w3.org/ns/ttml#metadata" xmlns:tts="http://www.w3.org/ns/ttml#styling" xmlns:ttp="http://www.w3.org/ns/ttml#parameter" ttp:profile="http://www.w3.org/TR/profile/sdp-us" >
+<head>
+<styling>
+<style xml:id="s1" tts:textAlign="center" tts:extent="90% 90%" tts:origin="5% 5%" tts:displayAlign="after"/>
+<style xml:id="s2" tts:fontSize=".72c" tts:backgroundColor="black" tts:color="white"/>
+<style xml:id="s3" tts:origin="5% 89%" tts:extent="138% 6%" tts:textAlign="center"/>
+<style xml:id="s4" tts:origin="5% 89%" tts:extent="354% 6%" tts:textAlign="center"/>
+<style xml:id="s5" tts:origin="5% 89%" tts:extent="188% 6%" tts:textAlign="center"/>
+<style xml:id="s6" tts:origin="5% 89%" tts:extent="242% 6%" tts:textAlign="center"/>
+<style xml:id="s7" tts:origin="5% 89%" tts:extent="335% 6%" tts:textAlign="center"/>
+</styling>
+<layout>
+<region xml:id="r1" style="s1"/>
+<region xml:id="r2" style="s3"/>
+<region xml:id="r3" style="s4"/>
+<region xml:id="r4" style="s5"/>
+<region xml:id="r5" style="s6"/>
+<region xml:id="r6" style="s7"/>
+</layout>
+</head>
+<body region="r1">
+<div>
+<p begin="00:00:00.000" end="00:00:04.140" region="r2" style="s2">Atrae a tu oponente a la Zona 1. Sigue atrayéndolo.</p>
+<p begin="00:00:04.140" end="00:00:08.797" region="r3" style="s2">Cuando sientas que tu oponente está atado a un paso de la zona T, usa un despeje diagonal para empujar a tu oponente hacia atrás.</p>
+<p begin="00:00:08.797" end="00:00:14.136" region="r4" style="s2">En la zona 7 examinamos de cerca si el oponente ha sido empujado.</p>
+<p begin="00:00:14.136" end="00:00:19.099" region="r5" style="s2">En la zona 7, en el momento en que el oponente despeja, se considera que te han empujado.</p>
+<p begin="00:00:19.099" end="00:00:23.709" region="r6" style="s2">Entre las zonas donde es posible destruir, mira el recorrido 6 o 9, que son las zonas más alejadas de la zona 7, y destruye.</p>
+<p begin="00:00:23.709" end="00:00:30.482" region="r2" style="s2">Atrae a tu oponente a la Zona 1. Sigue atrayéndolo.</p>
+<p begin="00:00:30.482" end="00:00:35.703" region="r3" style="s2">Cuando sientas que tu oponente está atado a un paso de la zona T, usa un despeje diagonal para empujar a tu oponente hacia atrás.</p>
+<p begin="00:00:35.703" end="00:00:41.888" region="r4" style="s2">En la zona 7 examinamos de cerca si el oponente ha sido empujado.</p>
+<p begin="00:00:41.888" end="00:00:46.474" region="r5" style="s2">En la zona 7, en el momento en que el oponente despeja, se considera que te han empujado.</p>
+<p begin="00:00:46.474" end="00:00:51.233" region="r6" style="s2">Entre las zonas donde es posible destruir, mira el recorrido 6 o 9, que son las zonas más alejadas de la zona 7, y destruye.</p>
+</div>
+</body>
+</tt>
