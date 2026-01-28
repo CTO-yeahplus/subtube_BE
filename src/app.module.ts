@@ -13,12 +13,12 @@ import { BullModule } from '@nestjs/bull';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { GoogleRecaptchaModule } from '@nestlab/google-recaptcha';
-import { addTransactionalDataSource } from 'typeorm-transactional';
-import { DataSource } from 'typeorm';
 import { MailModule } from './modules/mail.module';
 import { YoutubeModule } from "./modules/youtube.module";
 import { TranslateGoogleModule } from './modules/translateGoogle.module';
 import { PaymentModule } from './modules/payment.module';
+import { DataSource } from 'typeorm';
+import { addTransactionalDataSource, deleteDataSourceByName } from 'typeorm-transactional';
 
 @Module({
   imports: [
@@ -30,25 +30,46 @@ import { PaymentModule } from './modules/payment.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres', // mysql -> postgres 변경
-        url: configService.get('DATABASE_URL'), // Supabase 연결 문자열 사용
-        autoLoadEntities: true,
-        synchronize: true, // 개발 단계에서는 true (테이블 자동 생성), 운영시는 false 권장
-        ssl: {
-          rejectUnauthorized: false, // Supabase 연결을 위해 필수
-        },
-        keepConnectionAlive: true,
-        extra: {
-          charset: 'utf8mb4_unicode_ci',
-        },
-      }),
-      async dataSourceFactory(options) {
+      useFactory: (configService: ConfigService) => {
+        const dbUrl = configService.get<string>('DATABASE_URL');
+      
+        // 👇 [추가] DB 주소가 없으면 명확한 에러 메시지를 띄우고 멈춥니다.
+        if (!dbUrl) {
+          console.error('❌ [Fatal Error] DATABASE_URL is missing in .env file!');
+          throw new Error('DATABASE_URL environment variable is not defined.');
+        }
+      
+        // 주소가 로컬인지 확인 (이제 dbUrl이 있다고 확신하므로 에러 안 남)
+        const isLocal = dbUrl.includes('localhost') || dbUrl.includes('127.0.0.1');
+      
+        console.log(`[Database] Connecting to ${isLocal ? 'Localhost (No SSL)' : 'Remote (SSL)'}...`);
+      
+        return {
+          type: 'postgres',
+          url: dbUrl,
+          autoLoadEntities: true,
+          synchronize: true, 
+          ssl: isLocal ? false : { rejectUnauthorized: false },
+        };
+      },
+      
+      // 👇 아까 추가했던 트랜잭션 충돌 방지 코드는 그대로 유지해야 합니다!
+      dataSourceFactory: async (options) => {
+        const { DataSource } = await import('typeorm');
+        const { addTransactionalDataSource, deleteDataSourceByName } = await import('typeorm-transactional');
+
         if (!options) {
           throw new Error('Invalid options passed');
         }
 
-        return addTransactionalDataSource(new DataSource(options));
+        try {
+          deleteDataSourceByName('default');
+        } catch (e) {
+          // 처음 실행이라 삭제할 게 없으면 에러 무시
+        }
+
+        const dataSource = new DataSource(options);
+        return addTransactionalDataSource(dataSource);
       },
     }),
     I18nModule.forRoot({
