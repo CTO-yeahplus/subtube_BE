@@ -234,8 +234,8 @@ export const generateToken = (
   expiresIn: string,
   secretKey: string,
 ) => {
-  return sign(payload, secretKey, { expiresIn });
-};
+  return sign(payload, secretKey || '', { expiresIn: expiresIn as any });};
+  
 export const verifyToken = (token: string, secretKey: string) => {
   return verify(token, secretKey);
 };

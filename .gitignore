@@ -38,3 +38,5 @@ lerna-debug.log*
 .env.example
 /image
 *.spec.ts
+.pem
+.md
