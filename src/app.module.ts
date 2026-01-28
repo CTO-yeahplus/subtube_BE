@@ -16,7 +16,7 @@ import { GoogleRecaptchaModule } from '@nestlab/google-recaptcha';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
 import { MailModule } from './modules/mail.module';
-import {YoutubeModule} from "./modules/youtube.module";
+import { YoutubeModule } from "./modules/youtube.module";
 import { TranslateGoogleModule } from './modules/translateGoogle.module';
 import { PaymentModule } from './modules/payment.module';
 
@@ -31,16 +31,14 @@ import { PaymentModule } from './modules/payment.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        type: 'mysql',
-        host: configService.get('DB_HOST'),
-        port: configService.get('DB_PORT'),
-        username: configService.get('DB_USERNAME'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_NAME'),
+        type: 'postgres', // mysql -> postgres 변경
+        url: configService.get('DATABASE_URL'), // Supabase 연결 문자열 사용
         autoLoadEntities: true,
-        // entities: [__dirname + '/**/*.entity{.ts,.js}'],`
-        entities: ['dist/**/*.entity.js'],
-        synchronize: true,
+        synchronize: true, // 개발 단계에서는 true (테이블 자동 생성), 운영시는 false 권장
+        ssl: {
+          rejectUnauthorized: false, // Supabase 연결을 위해 필수
+        },
+        keepConnectionAlive: true,
         extra: {
           charset: 'utf8mb4_unicode_ci',
         },
@@ -88,4 +86,4 @@ import { PaymentModule } from './modules/payment.module';
     PaymentModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }

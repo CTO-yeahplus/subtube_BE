@@ -19,7 +19,7 @@ export class VideoPushEntity extends BaseEntity {
   @Column({ type: 'int', nullable: false })
   youtube_account_id: number;
 
-  @Column({ type: 'longtext', nullable: false })
+  @Column({ type: 'text', nullable: false })
   localizations: string;
 
   @Column({ type: 'varchar', nullable: false })

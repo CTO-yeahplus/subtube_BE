@@ -234,7 +234,10 @@ export const generateToken = (
   expiresIn: string,
   secretKey: string,
 ) => {
-  return sign(payload, secretKey || '', { expiresIn: expiresIn as any });};
+  console.log(`[GenerateToken] expiresIn Value: '${expiresIn}' (Type: ${typeof expiresIn})`);
+  const finalExpiresIn = expiresIn || '1d';
+  return sign(payload, secretKey || '', { expiresIn: finalExpiresIn as any });};
+  
   
 export const verifyToken = (token: string, secretKey: string) => {
   return verify(token, secretKey);

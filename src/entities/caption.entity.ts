@@ -18,7 +18,7 @@ export class CaptionEntity extends BaseEntity {
   @Column({ type: 'varchar', nullable: true })
   caption_id: string;
   
-  @Column({ type: 'longtext', nullable: true })
+  @Column({ type: 'text', nullable: true })
   text: string;
 
   @Column({ type: 'varchar', nullable: true })

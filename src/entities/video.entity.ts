@@ -19,6 +19,6 @@ export class VideoEntity extends BaseEntity {
   @Column({ type: 'varchar', nullable: true, default: null })
   page_token: string;
 
-  @Column({ type: 'longtext', nullable: false })
+  @Column({ type: 'text', nullable: false })
   content: string;
 }

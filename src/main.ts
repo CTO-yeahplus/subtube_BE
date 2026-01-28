@@ -61,11 +61,11 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Origin', 'X-Requested-With', 'Accept', 'Authorization', 'Language', 'Currency'],
   });
 
-  await app.listen(process.env.PORT, () => {
-    console.log(
-      `🚀 Application is running on: http://localhost:${process.env.PORT}/${globalPrefix}`,
-    );
-  });
-}
+  // 1. 서버 실행 (기다림)
+  await app.listen(process.env.PORT || 3000, '0.0.0.0');
+
+  // 2. 주소 출력
+  console.log(`🚀 Application is running on: ${await app.getUrl()}`);
+  }
 
 bootstrap();

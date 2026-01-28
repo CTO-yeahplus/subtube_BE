@@ -34,7 +34,7 @@ export class ExceptionError implements ExceptionFilter {
         let message = err;
         if (Array.isArray(err.errors) && err.errors.length > 0) {
           message = err.errors[0].message;
-          if (message.indexOf("quota") != -1) {
+          if (message && message.indexOf("quota") != -1) {
             message = "This action can not be done because you have ran out of points. Please try again later!"
           }
         }
