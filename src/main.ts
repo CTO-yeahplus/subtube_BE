@@ -3,6 +3,19 @@
  * This is only a minimal backend to get started.
  */
 
+import * as dns from 'dns';
+const originalLookup = dns.lookup;
+// lookup 함수 덮어쓰기 (무조건 family: 4 강제)
+(dns as any).lookup = (hostname, options, callback) => {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+  options = options || {};
+  options.family = 4; // 👈 여기가 핵심! 무조건 IPv4만 찾아라!
+  return originalLookup(hostname, options, callback);
+};
+
 import { NestFactory } from '@nestjs/core';
 
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
