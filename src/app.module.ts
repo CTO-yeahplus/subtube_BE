@@ -50,6 +50,10 @@ import { addTransactionalDataSource, deleteDataSourceByName } from 'typeorm-tran
           autoLoadEntities: true,
           synchronize: true, 
           ssl: isLocal ? false : { rejectUnauthorized: false },
+          // 👇👇 [핵심 추가] 이 코드가 "IPv4만 써!" 라고 강제합니다.
+          extra: {
+            family: 4, 
+          },
         };
       },
       
