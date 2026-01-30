@@ -493,6 +493,7 @@ export class AuthService {
   }
 
   async validateUser(email: string, password: string, phone_code: string) {
+    console.log('로그인 시도 데이터:', { email, phone_code }); // 데이터 확인
     return await this.connection.transaction(async (manager: EntityManager) => {
       const userInfo = await manager.findOne(UserEntity, {
         where: [
@@ -505,8 +506,11 @@ export class AuthService {
       if (!userInfo || (userInfo && userInfo.expire_verify < timeDate && userInfo.is_verify !== true)) {
         throw new BadRequestException('EMAIL_OR_PHONE_NOT_EXIST', 'EMAIL_OR_PHONE_NOT_EXIST');
       }
+
+      console.log('계정 찾음:', userInfo.email);
   
       if (!userInfo.password) {
+        console.log('결과: 비밀번호 틀림');
         throw new BadRequestException('INVALID_EMAIL', 'INVALID_EMAIL');
       }
 
@@ -517,15 +521,17 @@ export class AuthService {
           data: {is_verify: userInfo.is_verify}
         }, HttpStatus.PRECONDITION_FAILED);
       }
-  
+      console.log('비밀번호 비교 시작...');
       const checkPassword = comparePassword(
         password,
         userInfo.password,
       );
   
       if (!checkPassword) {
+        console.log('결과: 비밀번호 틀림');
         throw new BadRequestException('WRONG_PASS_LOGIN', 'WRONG_PASS_LOGIN');
       }
+      console.log('결과: 인증 성공');
       delete userInfo.password;
       return userInfo
     });

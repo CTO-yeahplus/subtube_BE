@@ -38,7 +38,7 @@ import { FirebaseService } from 'src/services/firebase.service';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secretOrPrivateKey: configService.get('JWT_KEY'),
+        secret: configService.get('JWT_KEY'),
         signOptions: {
           expiresIn: configService.get('EXPIRE_TIME_JWT'),
         },

@@ -103,5 +103,5 @@ def create_snapshot(root_dir, output_file):
 if __name__ == "__main__":
     # 현재 폴더를 기준으로 스냅샷 생성
     current_dir = os.getcwd()
-    output_filename = "migration_snapshot_fe.txt"
+    output_filename = "migration_snapshot_be.txt"
     create_snapshot(current_dir, output_filename)

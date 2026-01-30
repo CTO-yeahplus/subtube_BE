@@ -147,6 +147,7 @@ export class YoutubeService {
     return entity;
   }
 
+  // ✅ 수정된 부분: 파라미터 바인딩 적용
   async getYoutubeAccountByUserId(query, userId) {
     const page = query.page ?? NUMBER_PAGE.PAGE;
     const pageSize = query.pageSize ?? NUMBER_PAGE.PAGE_SIZE;
@@ -156,7 +157,8 @@ export class YoutubeService {
 
     return await this.youtubeAccountEntity.createQueryBuilder('ya')
       .select(["ya.id", "ya.email", "ya.name_channel", "ya.picture", "ya.user_id", "ya.total_video"])
-      .where( `ya.user_id = ${userId}`)
+      // 🚀 수정: :userId 파라미터 사용
+      .where('ya.user_id = :userId', { userId: userId }) 
       .orderBy(orderBy)
       .take(pageSize)
       .skip((page - 1) * pageSize)
@@ -226,6 +228,11 @@ export class YoutubeService {
     return await yt.search.list(listParams).then((response) => {
       return response.data;
     }).catch((error) => {
+      // ✅ [로그 추가] 진짜 에러 원인을 백엔드 터미널에 출력
+      console.error("🔥 YouTube API Error (getVideos):", error.message);
+      if (error.response) {
+         console.error("🔥 Error Response:", JSON.stringify(error.response.data, null, 2));
+      }
       if (auth) {
         if (Array.isArray(error.errors) && error.errors.length > 0) {
           let message = error.errors[0].message;
@@ -238,7 +245,7 @@ export class YoutubeService {
         }
         throw new HttpException("This-account-is-Invalid.", 452);
       }
-      throw new HttpException(error, 499);
+      throw new HttpException(error.message || "YouTube API Error", 499);
     });
   }
 
@@ -560,16 +567,24 @@ export class YoutubeService {
     return path;
   }
 
+  // ✅ 수정된 부분: getVideosYoutubeCache 함수
   async getVideosYoutubeCache(param, refreshToken) {
-    let query = `v.youtube_account_id = ${param.youtube_account_id}`;
+    const queryBuilder = this.VideoEntity.createQueryBuilder('v')
+      // 🚀 수정: :accountId 파라미터 사용
+      .where('v.youtube_account_id = :accountId', { accountId: param.youtube_account_id });
+
     if (param.text) {
-      query += ` AND v.text = "${param.text}"`;
+      // 🚀 수정: :text 파라미터 사용
+      queryBuilder.andWhere('v.text = :text', { text: param.text });
     }
+
     if (param.page_token) {
-      query += ` AND v.page_token = "${param.page_token}"`;
+       // 🚀 수정: :pageToken 파라미터 사용
+      queryBuilder.andWhere('v.page_token = :pageToken', { pageToken: param.page_token });
     }
-    const entityVideo = await this.VideoEntity.createQueryBuilder('v')
-        .where(query).getOne();
+
+    const entityVideo = await queryBuilder.getOne();
+
     if (entityVideo) {
       return JSON.parse(entityVideo.content);
     }
@@ -734,26 +749,44 @@ export class YoutubeService {
     });
   }
 
+  // ✅ 수정된 부분: getTotalTranslationCaptionByUserId 함수
   async getTotalTranslationCaptionByUserId(userId, youtubeAccountIds) {
+    if (!youtubeAccountIds || youtubeAccountIds.length === 0) {
+      return 0;
+    }
+
     const items = await this.CaptionPushEntity.createQueryBuilder('c')
         .select(["c.video_id"])
-        .where( `c.user_id = ${userId} And c.youtube_account_id IN (${youtubeAccountIds.toString()})`)
+        // 🚀 수정: :userId 파라미터 사용
+        .where('c.user_id = :userId', { userId })
+        // 🚀 수정: IN (:...ids) 문법 사용 (배열을 안전하게 처리)
+        .andWhere('c.youtube_account_id IN (:...ids)', { ids: youtubeAccountIds })
         .getMany();
     return await this.totalItemInValueOfObject(items);
   }
 
+  // ✅ 수정된 부분: getTotalTranslationVideoByUserId 함수
   async getTotalTranslationVideoByUserId(userId, youtubeAccountIds) {
+     if (!youtubeAccountIds || youtubeAccountIds.length === 0) {
+      return 0;
+    }
+    
     const items = await this.VideoPushEntity.createQueryBuilder('v')
         .select(["v.video_id"])
-        .where( `v.user_id = ${userId} And v.youtube_account_id IN (${youtubeAccountIds.toString()})`)
+        // 🚀 수정: :userId 파라미터 사용
+        .where('v.user_id = :userId', { userId })
+        // 🚀 수정: IN (:...ids) 문법 사용
+        .andWhere('v.youtube_account_id IN (:...ids)', { ids: youtubeAccountIds })
         .getMany();
     return await this.totalItemInValueOfObject(items);
   }
-
+  
+  // ✅ 수정된 부분: getAllAccountYoutubeByUserId 함수
   async getAllAccountYoutubeByUserId(userId) {
     return await this.youtubeAccountEntity.createQueryBuilder('ya')
         .select(["ya.id", "ya.user_id", "ya.total_video"])
-        .where( `ya.user_id = ${userId}`)
+        // 🚀 수정: :userId 파라미터 사용
+        .where('ya.user_id = :userId', { userId: userId }) 
         .getManyAndCount();
   }
 
